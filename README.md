@@ -126,16 +126,6 @@ LOG_LEVEL=INFO
 MODEL_BASE_PATH=data/
 ```
 
-### Docker Configuration
-
-The Docker container:
-
-- Uses Python 3.11-slim base image
-- Installs all dependencies automatically
-- Loads ML models and data files
-- Exposes port 8000
-- Reads environment variables from `.env` file
-
 ## Project Structure
 
 ```
@@ -154,74 +144,6 @@ welli/
 └── README.md
 ```
 
-## Development
-
-### Local Development Setup
-
-```bash
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run with reload for development
-python -m uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-### Docker Development
-
-```bash
-# Build and run for development
-docker build -t welli-api .
-docker run -p 8000:8000 --env-file .env -v $(pwd):/app welli-api
-
-# View logs
-docker logs -f welli-api
-```
-
-## Production Deployment
-
-### Docker Production
-
-```bash
-# Build production image
-docker build -t welli-api:latest .
-
-# Run in production mode
-docker run -d \
-  --name welli-api \
-  -p 8000:8000 \
-  --env-file .env \
-  --restart unless-stopped \
-  welli-api:latest
-
-# Health check
-curl http://localhost:8000/health
-```
-
-### Docker Compose (Optional)
-
-Create a `docker-compose.yml` for easier management:
-
-```yaml
-version: '3.8'
-services:
-  welli-api:
-    build: .
-    ports:
-      - "8000:8000"
-    env_file: .env
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-```
-
-Run with: `docker-compose up -d`
 
 ## License
 
