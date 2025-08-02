@@ -16,4 +16,4 @@ I would skip everything else for now and just build a solid, small demo of the m
 
 ### Why
 
-This experience is fast to prototype, LLM-powered, and could be a competitive edge if it feels genuinely personal and useful.
+This experience is fast to prototype, LLM-powered, and could be a competitive edge if it feels personal and useful.

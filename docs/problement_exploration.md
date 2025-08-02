@@ -15,28 +15,22 @@ The goal is to help Type C users become more like Type A, and not like Type B. T
 - Attracting users who are likely to engage long-term.
 - Designing an early experience that gets them hooked and delivers real value from day one.
 
-**Note:** While this case focuses on the app experience, marketing efforts are just as important. Targeting the right users from the start can make a big difference in long-term retention.
+**Note:** While this case focuses on the app experience, marketing efforts are just as important. Targeting the right users from the start can make a big difference.
 
 ## Assumptions
 
 - Users download the app because they have a wellness goal (fitness, stress relief, etc.).
 - We can collect basic info during onboarding (goals, preferences).
 - User behavior can be tracked (content interaction, app open frequency).
-- Push notifications can be sent to nudge users.
-- There is a social element (users can invite friends or see each other’s progress).
+- Push notifications can be sent to users.
 
 ## Signals for Personalization
 
-#TODO: revisit
+To power content matching, clustering, churn prediction, and daily planning, we focus on a few key early signals:
 
-To identify and engage users early, useful signals include:
-
--**Streaks:** Are they coming back day after day?
-
--**App open frequency:** How often do they open the app?
-
--**Response to notifications**
-
--**Content interaction:** What types of content do they engage with (meditations, workouts, challenges, etc.)?
-
--**Goal alignment:** What goal did they choose at onboarding (e.g., “reduce stress,” “get fit,” “sleep better”), and are they actually interacting with content that supports that goal?
+* **User-entered goal** : Captured at onboarding and used for semantic content matching.
+* **Streak length** : Indicates consistency and potential habit formation.
+* **App open patterns** : Frequency and time of day help infer routine vs. sporadic use.
+* **Content preferences** : Types of content engaged with (e.g., meditations, workouts, challenges) and preferences.
+* **Notification response** : Measures responsiveness to messages and prompts.
+* **Daily plan follow-through** : Tracks whether users complete suggested plans.
