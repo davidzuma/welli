@@ -1,3 +1,5 @@
+/Users/davidzumaquero/GitHub/davidzuma/welli/problem_statement_and_proposal.md
+
 # Welli - Digital Wellness Assistant
 
 AI-powered retention engine for digital wellness apps. Provides personalized content matching, user clustering, churn prediction, and daily wellness planning.
@@ -7,7 +9,7 @@ AI-powered retention engine for digital wellness apps. Provides personalized con
 - FastAPI backend with modular ML components:
   - Goal-to-content matching (FAISS + OpenAI embeddings)
   - Behavioral clustering (KMeans)
-  - Churn prediction (Logistic Regression)
+  - Churn prediction (Random forest classifier)
   - Micro-coach (OpenAI GPT-4o-mini)
 
 ## Quick Start
@@ -22,15 +24,31 @@ AI-powered retention engine for digital wellness apps. Provides personalized con
 ```bash
 git clone https://github.com/davidzuma/welli.git
 cd welli
+
+# Create and activate virtual environment (recommended)
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
+
+# Setup environment variables
 cp .env.example .env
 # Add your OpenAI API key to .env
+
 ```
 
 ### Running
 
 #### Option 1: Docker (Recommended)
 
+
+Ensure Docker is installed and running
+Download Docker: https://www.docker.com/get-started
+Verify Docker daemon is active
+```bash
+docker info
+```
 ```bash
 # 1. Clone and setup
 git clone https://github.com/davidzuma/welli.git
@@ -53,10 +71,14 @@ docker stop welli-api && docker rm welli-api
 #### Option 2: Local Development
 
 ```bash
-# 1. Install dependencies
+# 1. Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# 2. Install dependencies
 pip install -r requirements.txt
 
-# 2. Run the application
+# 3. Run the application
 python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
@@ -91,6 +113,19 @@ curl -X POST http://localhost:8000/api/v1/match-goal \
   -H "Content-Type: application/json" \
   -d '{"goal": "I want to reduce stress and anxiety", "limit": 3}'
 
+# Classify user into behavioral segment
+curl -X POST http://localhost:8000/api/v1/cluster-user \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "user123",
+    "session_count": 25,
+    "avg_session_duration": 15.5,
+    "streak_length": 7,
+    "preferred_time_of_day": "morning",
+    "content_engagement_rate": 0.8,
+    "notification_response_rate": 0.6
+  }'
+
 # Predict churn risk
 curl -X POST http://localhost:8000/api/v1/predict-churn \
   -H "Content-Type: application/json" \
@@ -106,24 +141,19 @@ curl -X POST http://localhost:8000/api/v1/predict-churn \
     "content_completion_rate": 0.75,
     "goal_progress_percentage": 65.0
   }'
-```
 
-## Configuration
-
-### Environment Variables
-
-Create a `.env` file with the following variables:
-
-```bash
-# Required
-OPENAI_API_KEY=your_openai_api_key_here
-
-# Optional (with defaults)
-API_HOST=0.0.0.0
-API_PORT=8000
-API_RELOAD=false
-LOG_LEVEL=INFO
-MODEL_BASE_PATH=data/
+# Generate personalized daily wellness plan
+curl -X POST http://localhost:8000/api/v1/daily-plan \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "user123",
+    "goal": "reduce stress and improve sleep",
+    "current_streak": 7,
+    "recent_activities": ["meditation", "breathing exercise"],
+    "available_time_minutes": 20,
+    "preferred_time": "evening",
+    "mood": "stressed"
+  }'
 ```
 
 ## Project Structure
@@ -143,7 +173,6 @@ welli/
 ├── .env.example       # Environment variables template
 └── README.md
 ```
-
 
 ## License
 
