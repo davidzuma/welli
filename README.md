@@ -1,5 +1,3 @@
-/Users/davidzumaquero/GitHub/davidzuma/welli/problem_statement_and_proposal.md
-
 # Welli - Digital Wellness Assistant
 
 AI-powered retention engine for digital wellness apps. Provides personalized content matching, user clustering, churn prediction, and daily wellness planning.
