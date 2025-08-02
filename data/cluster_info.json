@@ -1,0 +1,24 @@
+{
+  "clusters": {
+    "0": {
+      "name": "Routine Builders",
+      "description": "Users who prefer structured, consistent wellness routines"
+    },
+    "1": {
+      "name": "Explorers",
+      "description": "Users who like trying different activities and approaches"
+    },
+    "2": {
+      "name": "Casual Check-ins",
+      "description": "Users who engage sporadically but consistently"
+    }
+  },
+  "feature_names": [
+    "session_count",
+    "avg_session_duration",
+    "streak_length",
+    "preferred_time_encoded",
+    "content_engagement_rate",
+    "notification_response_rate"
+  ]
+}
