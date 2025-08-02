@@ -32,6 +32,6 @@ Rather than relying on a single model, this approach combines simple but effecti
 ### How This Fits Into the User Journey
 
 * **Day 0 (Signup)** : User selects a goal → app immediately recommends semantically matched content.
-* **Days 1–5** : Behavioral data is collected → user is clustered → app adapts recommendations and nudging style.
+* **Days 1–5** : Behavioral data is collected → user is clustered → app adapts recommendations.
 * **Day 3+** : Churn prediction model monitors usage → if risk is high, app intervenes.
 * **Daily** : Micro-coach checks in, builds a mini plan with the user, and later follows up to reinforce progress.
