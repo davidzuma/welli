@@ -20,9 +20,10 @@ class ChurnPredictor:
     """
     
     def __init__(self):
-        self.model_loader = ModelLoader()
+        self.model_loader = ModelLoader(base_path="ml_models/churn_classification")
         self.feature_prep = FeaturePreparator()
         self.churn_model = None
+        self.churn_scaler = None
         self.feature_names = [
             "days_since_signup",
             "total_sessions", 
@@ -38,14 +39,20 @@ class ChurnPredictor:
         self._load_model()
     
     def _load_model(self):
-        """Load trained churn prediction model - required, no fallback"""
-        # Try different model formats
-        self.churn_model = (
-            self.model_loader.load_joblib_model("churn_model.joblib") or
-            self.model_loader.load_pickle_model("churn_model.pkl")
-        )
+        """Load trained churn prediction model and scaler - required, no fallback"""
+        # Load trained churn model - required
+        self.churn_model = self.model_loader.load_joblib_model("churn_model.joblib")
         
-        logger.info("Successfully loaded churn prediction model")
+        if not self.churn_model:
+            raise Exception("Churn model not found. Please ensure churn_model.joblib exists in ml_models/churn_classification/ directory")
+        
+        # Load churn scaler - required
+        self.churn_scaler = self.model_loader.load_joblib_model("churn_scaler.joblib")
+        
+        if not self.churn_scaler:
+            raise Exception("Churn scaler not found. Please ensure churn_scaler.joblib exists in ml_models/churn_classification/ directory")
+        
+        logger.info("Successfully loaded churn prediction model and scaler")
     
     def _get_risk_factors(self, features: np.ndarray, churn_prob: float) -> List[str]:
         """Identify key risk factors contributing to churn probability"""
@@ -112,6 +119,9 @@ class ChurnPredictor:
         if not self.churn_model:
             raise Exception("Churn model not loaded")
         
+        if not self.churn_scaler:
+            raise Exception("Churn scaler not loaded")
+        
         try:
             # Convert Pydantic model to dict
             if hasattr(user_data, 'dict'):
@@ -151,4 +161,4 @@ class ChurnPredictor:
     
     def is_ready(self) -> bool:
         """Check if the churn predictor is ready to use"""
-        return self.churn_model is not None
+        return self.churn_model is not None and self.churn_scaler is not None

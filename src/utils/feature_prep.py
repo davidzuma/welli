@@ -69,35 +69,3 @@ class FeaturePreparator:
         except Exception as e:
             logger.error(f"Error preparing churn features: {str(e)}")
             return np.zeros((1, 8))
-    
-    def normalize_similarity_scores(self, scores: List[float]) -> List[float]:
-        """Normalize similarity scores to 0-1 range"""
-        if not scores:
-            return []
-        
-        min_score = min(scores)
-        max_score = max(scores)
-        
-        if max_score == min_score:
-            return [1.0] * len(scores)
-        
-        return [(score - min_score) / (max_score - min_score) for score in scores]
-    
-    def extract_keywords(self, text: str) -> List[str]:
-        """Extract keywords from text for matching"""
-        # Simple keyword extraction - in production, use more sophisticated NLP
-        import re
-        
-        # Clean and split text
-        words = re.findall(r'\b\w+\b', text.lower())
-        
-        # Filter out common stop words
-        stop_words = {
-            'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',
-            'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on', 'that', 'the',
-            'to', 'was', 'will', 'with', 'i', 'me', 'my', 'myself', 'we', 'our'
-        }
-        
-        keywords = [word for word in words if word not in stop_words and len(word) > 2]
-        
-        return keywords[:10]  # Return top 10 keywords

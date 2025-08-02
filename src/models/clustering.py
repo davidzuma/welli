@@ -6,7 +6,7 @@ import numpy as np
 from typing import Dict, Any
 import logging
 from dotenv import load_dotenv
-from src.utils.model_loader import ModelLoader, ensure_dummy_data
+from src.utils.model_loader import ModelLoader
 from src.utils.feature_prep import FeaturePreparator
 
 # Load environment variables
@@ -20,29 +20,36 @@ class UserClusterer:
     """
     
     def __init__(self):
-        self.model_loader = ModelLoader()
+        self.model_loader = ModelLoader(base_path="ml_models/clustering")
         self.feature_prep = FeaturePreparator()
         self.kmeans_model = None
+        self.clustering_scaler = None
         self.cluster_info = None
-        
-        # Ensure dummy data exists
-        ensure_dummy_data()
         
         # Load and validate models
         self._load_models()
     
     def _load_models(self):
-        """Load KMeans model and cluster information - required, no fallback"""
+        """Load KMeans model, scaler, and cluster information - required, no fallback"""
         # Load trained KMeans model - required
         self.kmeans_model = self.model_loader.load_joblib_model("kmeans_model.joblib")
         
         if not self.kmeans_model:
-            raise Exception("KMeans model not found. Please ensure kmeans_model.joblib exists in data/ directory")
+            raise Exception("KMeans model not found. Please ensure kmeans_model.joblib exists in ml_models/clustering/ directory")
+        
+        # Load clustering scaler - required
+        self.clustering_scaler = self.model_loader.load_joblib_model("clustering_scaler.joblib")
+        
+        if not self.clustering_scaler:
+            raise Exception("Clustering scaler not found. Please ensure clustering_scaler.joblib exists in ml_models/clustering/ directory")
         
         # Load cluster information - required
         self.cluster_info = self.model_loader.load_json_data("cluster_info.json")
         
-        logger.info("Successfully loaded KMeans model and cluster info")
+        if not self.cluster_info:
+            raise Exception("Cluster info not found. Please ensure cluster_info.json exists in ml_models/clustering/ directory")
+        
+        logger.info("Successfully loaded KMeans model, scaler, and cluster info")
     
     def cluster_user(self, user_data: Any) -> Dict[str, Any]:
         """
@@ -56,6 +63,9 @@ class UserClusterer:
         """
         if not self.kmeans_model:
             raise Exception("KMeans model not loaded")
+        
+        if not self.clustering_scaler:
+            raise Exception("Clustering scaler not loaded")
         
         if not self.cluster_info:
             raise Exception("Cluster info not loaded")
@@ -100,4 +110,5 @@ class UserClusterer:
     def is_ready(self) -> bool:
         """Check if the clusterer is ready to use"""
         return (self.kmeans_model is not None and 
+                self.clustering_scaler is not None and
                 self.cluster_info is not None)

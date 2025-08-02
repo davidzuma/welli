@@ -8,7 +8,7 @@ import logging
 import os
 import json
 from dotenv import load_dotenv
-from src.utils.model_loader import ModelLoader, ensure_dummy_data
+from src.utils.model_loader import ModelLoader
 
 # Load environment variables from .env file
 load_dotenv()
@@ -27,9 +27,6 @@ class ContentMatcher:
         self.content_data = []
         self.embedding_dimension = 1536  # text-embedding-3-small dimension
         self.embedding_model = "text-embedding-3-small"  # Can be changed to text-embedding-3-large
-        
-        # Ensure dummy data exists
-        ensure_dummy_data()
         
         # Initialize everything
         self._setup_openai()
